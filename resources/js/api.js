@@ -1,29 +1,36 @@
 
-const apiUrl='http://localhost:8000/api';
+const apiUrl='http://127.0.0.1:8000/api';
 const myHeaders= new Headers();
-myHeaders.append("Accept", "application/vnd.api+json");
-myHeaders.append("Content-Type", "application/vnd.api+json");
+myHeaders.append("Accept", "application/json");
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append('X-CSRF-TOKEN',  document.head.querySelector('meta[name="csft_token"]').content);
+// myHeaders.append('XSRF-TOKEN', getCookieValue(csrftoken))
 /**
  * Api hivás
  *  reqData= Kérés adatok Json formátumba.
  *  method= Kérés metudusa
  *  route= Kérés utvonala pl: /login
  * */
-function api(reqData, method,rout) {
-    const formData = new FormData();
-    reqData = JSON.parse(reqData)
-    for (let key in reqData) {
-        formData.append(key, reqData[key]);
-    }
+async function api(reqData, method, route) {
     const requestOptions = {
         method: method,
         headers: myHeaders,
-        body: formData,
+        body: JSON.stringify(reqData),
         redirect: 'follow'
     };
-    fetch(apiUrl, rout)
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(err => console.error('error', err));
+    return new Promise((resolve, reject) => {
+        fetch(apiUrl+route,requestOptions)
+            .then(response => {
+
+                    return response.json();
+
+            })
+            .then(data=> {
+                resolve(data)
+            })
+            .catch(error=>{
+                reject(error);
+            })
+    })
 }
 export default api

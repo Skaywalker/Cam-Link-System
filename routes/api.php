@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AuthContorller;
 use App\Http\Controllers\Api\V1\CameraController;
 use App\Http\Controllers\Api\V1\CustomerController;
 use App\Http\Controllers\Api\V1\RecorderController;
-use App\Models\AuthContorller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,13 +25,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('login',[AuthContorller::class ,'login']);
 Route::post('register',[AuthContorller::class ,'register']);
-
+Route::apiResource('customers', CustomerController::class);
+Route::apiResource('recorders', RecorderController::class);
+Route::apiResource('cameras', CameraController::class);
+Route::post('logout',[AuthContorller::class ,'logout']);
 
 Route::group(['middleware'=>['auth:sanctum']], function (){
-    Route::apiResource('customers', CustomerController::class);
-    Route::apiResource('recorders', RecorderController::class);
-    Route::apiResource('cameras', CameraController::class);
-    Route::post('logout',[AuthContorller::class ,'logout']);
+
 });
 /*Addat titkositás
  *

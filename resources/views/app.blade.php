@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        <meta name="csft_token" content="{{csrf_token()}}">
         <title>Cam-Link System</title>
             @vite(['resources/js/app.js'])
     </head>
@@ -32,4 +32,14 @@
         </ul>
     </footer>
     </body>
+<script>
+    (function (){
+        const csrfToken = document.head.querySelector('meta[name="csft_token"]').content;
+        console.log(csrfToken)
+            if (csrfToken){
+                localStorage.setItem('csrfToken',csrfToken)
+            }
+        }
+    )();
+</script>
 </html>

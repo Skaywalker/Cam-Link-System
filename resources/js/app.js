@@ -23,11 +23,19 @@ if (document.getElementById('loginForm')){
     const loginForm = document.getElementById('loginForm')
     loginForm.addEventListener('submit',(e)=>{
         e.preventDefault();
-         const reqData= JSON.stringify({
+        console.log(loginForm)
+         const reqData={
              email: loginForm.email.value,
              password: loginForm.password.value
-         })
+        }
+        console.log('reqData',reqData)
         api(reqData,'POST','/login')
+            .then(data=>{
+                console.log('data',data)
+            })
+            .catch(error=>{
+                console.log('error',error)
+            })
     })
 }
 

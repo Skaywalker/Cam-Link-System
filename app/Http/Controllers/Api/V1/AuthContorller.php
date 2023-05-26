@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\LoginRequest;
 use App\Http\Requests\Api\V1\RegisterRequest;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthContorller extends Controller
 {
-    public function login(LoginRequest $request)
+    public function login(Request $request)
     {
         $request= $request->only('email', 'password');
 
@@ -32,7 +34,7 @@ class AuthContorller extends Controller
                 ]);
             }
         }
-            return response()->json(['error' => 'Hibás bejelentkezés!'],401);
+            return response()->json(['errors' => 'Hibás email jelszó páros!'],401);
 
     }
     public function logout(){

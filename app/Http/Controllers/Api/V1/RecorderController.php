@@ -16,11 +16,13 @@ use Illuminate\Support\Facades\Crypt;
 
 class RecorderController extends Controller
 {
+    //todo: Ellenőrizni miért nem mennek a get requestek errora ftnak.
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        //bug: ErrorException: Attempt to read property "customerToRecorders" on null in file D:\web\camLink\app\Http\Controllers\Api\V1\RecorderController.php on line 27
         //ügyvél nézet ellenőrzés
         if(Auth::user()->tokenCan('customer:wive')){
             $includeCameras=$request->query('includeCameras');
@@ -68,6 +70,11 @@ class RecorderController extends Controller
     {
         //todo: user->tokenCan(installer)
         //todo: user()->tokenCan('customer:wive')
+        //bug: "message": "Call to a member function load() on null",
+        //    "exception": "Error",
+        //    "file": "D:\\web\\camLink\\app\\Http\\Controllers\\Api\\V1\\RecorderController.php",
+        //    "line": 72,
+
         if (Customer::find($recorder->customer_id)->load('costumerToUser')->id==Auth::user()->id){
         $includeCameras=$request->query('includeCameras');
         if ($includeCameras){
