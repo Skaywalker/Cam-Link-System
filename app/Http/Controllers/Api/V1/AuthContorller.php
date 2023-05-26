@@ -34,11 +34,11 @@ class AuthContorller extends Controller
                 ]);
             }
         }
-            return response()->json(['errors' => 'Hibás email jelszó páros!'],401);
+            return response()->json(['alert'=>['type'=>'danger','message'=>'Hibás email jelszópáros!']],401);
 
     }
     public function logout(){
-        Auth::user()->currentAccessToken()->delete();
+        Auth::user()->tokens()->delete();
         return response()->json(['alert'=>['type'=>'success','message'=>'Sikeres kijelentkezés!']]);
     }
     public function register(RegisterRequest $request){

@@ -4,6 +4,9 @@ const myHeaders= new Headers();
 myHeaders.append("Accept", "application/json");
 myHeaders.append("Content-Type", "application/json");
 myHeaders.append('X-CSRF-TOKEN',  document.head.querySelector('meta[name="csft_token"]').content);
+if (localStorage.getItem('_token')){
+    myHeaders.append('Authorization', localStorage.getItem('_token'));
+}
 // myHeaders.append('XSRF-TOKEN', getCookieValue(csrftoken))
 /**
  * Api hivás
@@ -13,9 +16,10 @@ myHeaders.append('X-CSRF-TOKEN',  document.head.querySelector('meta[name="csft_t
  * */
 async function api(reqData, method, route) {
     const requestOptions = {
+
         method: method,
         headers: myHeaders,
-        body: JSON.stringify(reqData),
+        body:(reqData==="")? "": JSON.stringify(reqData),
         redirect: 'follow'
     };
     return new Promise((resolve, reject) => {

@@ -9,17 +9,19 @@
     </head>
     <body>
     <header>
-    <nav>
+    <nav id="nav-bar">
         <ul>
             <li>Cam-link-System</li>
             <li>Bejelentkezés</li>
             <li>Kapcsolat</li>
         </ul>
+{{--bug: Miért nem lehet meghívni a onclick="logOut()"--}}
+        <ul class="logout-nav-item">
+            <li data-nav="logOut">Kijeletkezés</li>
+        </ul>
     </nav>
-        <div class="hidden" id="alert">
-            <div class="alert alert-warning alert-active">
+        <div class="alert" id="alert">
 
-            </div>
         </div>
     </header>
     <main id="mainContent">
@@ -32,14 +34,4 @@
         </ul>
     </footer>
     </body>
-<script>
-    (function (){
-        const csrfToken = document.head.querySelector('meta[name="csft_token"]').content;
-        console.log(csrfToken)
-            if (csrfToken){
-                localStorage.setItem('csrfToken',csrfToken)
-            }
-        }
-    )();
-</script>
 </html>

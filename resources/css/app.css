@@ -44,6 +44,7 @@ nav ul{
     flex-direction: row;
 }
 nav{
+    display: flex;
     width: calc(100% - .9rem);
     background-color: var(--nav-background-color);
     padding: .5rem;
@@ -188,4 +189,9 @@ footer{
     margin: .4rem;
 }.m-5{
     margin: .5rem;
+}
+.logout-nav-item{
+    position: absolute;
+    right: 0;
+    margin-right: 2rem;
 }

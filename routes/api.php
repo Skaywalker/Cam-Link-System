@@ -24,13 +24,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('login',[AuthContorller::class ,'login']);
-Route::post('register',[AuthContorller::class ,'register']);
-Route::apiResource('customers', CustomerController::class);
-Route::apiResource('recorders', RecorderController::class);
-Route::apiResource('cameras', CameraController::class);
-Route::post('logout',[AuthContorller::class ,'logout']);
+
 
 Route::group(['middleware'=>['auth:sanctum']], function (){
+    Route::post('register',[AuthContorller::class ,'register']);
+    Route::apiResource('customers', CustomerController::class);
+    Route::apiResource('recorders', RecorderController::class);
+    Route::apiResource('cameras', CameraController::class);
+    Route::post('logout',[AuthContorller::class ,'logout']);
 
 });
 /*Addat titkositás
