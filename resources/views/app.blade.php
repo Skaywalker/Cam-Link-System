@@ -11,14 +11,14 @@
     <header>
     <nav id="nav-bar">
         <ul>
-            <li>Cam-link-System</li>
-            <li>Bejelentkezés</li>
+            <li data-nav="main">Cam-link-System</li>
             <li>Kapcsolat</li>
+
         </ul>
 {{--bug: Miért nem lehet meghívni a onclick="logOut()"--}}
-        <ul class="logout-nav-item">
-            <li data-nav="logOut">Kijeletkezés</li>
-        </ul>
+
+
+
     </nav>
         <div class="alert" id="alert">
 
