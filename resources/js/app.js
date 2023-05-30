@@ -1,5 +1,26 @@
 import './bootstrap';
 import '../css/app.css';
+import * as bootstrap from 'bootstrap';
+// console.log(bootstrap)
+window.bootstrap = bootstrap;
+let pages={
+    0:{
+        name:'Ügyfelek',
+        dataNav:'customer',
+        dataClass:'nav-item nav-link'
+    },
+    1:{
+        // main
+        name:'Rögzitők',
+        dataNav:'recorders',
+        dataClass:'nav-item nav-link'
+    },
+    2:{
+        name:'Admin',
+        dataNav:'admin',
+        dataClass:'nav-item nav-link'
+    },
+}
 import customAlert from './alert.js';
 import api from './api.js';
 // const api=require('./api.js')
@@ -15,50 +36,57 @@ let logOut=()=>{
             }
             localStorage.removeItem('_token')
             localStorage.removeItem('user')
-            const navBar = document.getElementById('nav-bar');
-            //nav linkek vissza állitása a html kodban meghatározott ra.
-            for (let i=navBar.children[0].children.length-1; i>1; i--){
-                navBar.children[0].children[i].remove()
-            }
+            const navSideBar = document.getElementById('nav-side-menu');
+            const navBar=document.getElementById('nav-bar')
+            // Menűpontok tőrlése!
+            Object.values(navBar.children).map(child=>{
+                child.remove()
+            })
+            Object.values(navSideBar.children).map(child=>{
+                child.remove()
+            })
             loginPage();
         })
         .catch(err=>{
             console.log(err)
         })
 }
+/**
+   navArea= Ahova be szeretnéd arkni a nav elemeket.
+ */
+let genNavelEment=(navArea)=>{
+    console.log(pages)
+        Object.values(pages).map(page=>{
+            const item=document.createElement('li')
+            console.log(page.name,'|',page.dataNav,'|', page.dataClass)
+            item.innerText=page.name
+            item.dataset.nav=page.dataNav
+            item.classList=page.dataClass;
+            navArea.append(item);
+        })
+}
 const mainPage=()=>{
     if (localStorage.getItem('_token')) {
         const navBar = document.getElementById('nav-bar')
-        for (let i=0;2>i;i++){
-            const navitem= document.createElement('li');
-            if (i===0){
-                navitem.dataset.nav='customers'
-                navitem.innerText='Ügyfelek'
-            } if (i===1){
-                navitem.dataset.nav='admin'
-                navitem.innerText='Admin'
-            }
-
-            navBar.children[0].append(navitem)
-        }
-        //log out gomb elkészitése
+        const navSideMenu = document.getElementById('nav-side-menu')
+        const navFild=document.querySelector('nav')
+        console.log(pages)
+        genNavelEment(navBar);
+        genNavelEment(navSideMenu);
+        //Kijelentkezés gomb létrehozzása
         const logOutLi=document.createElement('li')
-        logOutLi.classList.add('logout-nav-item')
+        logOutLi.classList.add('nav-item')
+        logOutLi.classList.add('nav-link')
         logOutLi.dataset.nav='logOut';
         logOutLi.innerText='Kijelentkezés'
-
-
-
-        navBar.children[0].append(logOutLi)
+        navSideMenu.append(logOutLi)
         console.log(navBar)
-        navBar.addEventListener('click', (e) => {
-            console.log(e.target.dataset.nav)
+        navFild.addEventListener('click',(e)=>{
             if (e.target.dataset.nav === 'logOut') {
                 logOut()
             }
             if (e.target.dataset.nav === "main") mainPage();
             if (e.target.dataset.nav ==='contact') contact();
-
         })
         const mainContent = document.getElementById('mainContent');
         mainContent.innerHTML = `H2`
@@ -70,16 +98,29 @@ const loginPage=()=>{
     const mainContent = document.getElementById('mainContent');
 
     mainContent.innerHTML =`
-        <div id="login">
-            <form class="card" id="loginForm">
-                <label for="email" class="form-label">Email:</label>
+        <div id="login" class="col-8" >
+            <form class="card" id="loginForm" style="margin: auto; max-width: 600px;">
+            <div class="card-header text-center"><h2>Bejeletketés</h2></div>
+            <div class="card-body">
+            <div class="mb-3">
+                 <label for="email" >Email:</label>
                 <input type="email" class="form-control" id="email">
+            </div>
+             <div class="mb-3">
                 <label for="password" class="form-label">Jelszó:</label>
                 <input type="password" class="form-control" id="password">
+              </div>
+              <div class="d-flex flex-row-reverse">
                 <button type="submit" class="btn btn-primary">Bejelntkezés</button>
+              </div>
+            </div>
+            <div class="card-footer">
+            <a class="nav-link" data-nav="passwordReset"> Eljeleftet jelszó!</a>
+            </div>
             </form>
         </div>
     `
+
 }
 if (token===null){
     console.log('token')
@@ -87,9 +128,14 @@ if (token===null){
 }else{
     mainPage();
 }
+
+
+
 //login form alat elérhető elemek
 if (document.getElementById('loginForm')){
     const loginForm = document.getElementById('loginForm')
+    //todo Password keírás utáán entterrel lehesen submitolni.
+
     loginForm.addEventListener('submit',(e)=>{
         e.preventDefault();
          const reqData={
