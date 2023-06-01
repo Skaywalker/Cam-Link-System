@@ -29,4 +29,8 @@ class Recorder extends Model
     {
         return $this->hasMany(Camera::class, 'recorder_id','id');
     }
+    public function recordeToCostumer(){
+     return $this->belongsTo(Customer::class, 'customer_id','id');
+     }
+
 }

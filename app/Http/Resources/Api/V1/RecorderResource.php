@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Api\V1;
 
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Crypt;
@@ -27,6 +28,7 @@ class RecorderResource extends JsonResource
         if(isset($this->channels)) $this->channels=json_decode($this->channels);
 
         return ['id' => $this->id,
+            'customerId' => $this->customer_id,
             'name' => $this->name,
             'serialNumber'=>$this->serial_number,
             'localIp'=>$this->local_ip,
@@ -35,7 +37,8 @@ class RecorderResource extends JsonResource
             'users'=>$this->users,
             'channels'=>$this->channels,
             'installerId'=>$this->installer_id,
-            'cameras'=>CameraResource::collection($this->whenLoaded('recorderToCameras'))
+            'cameras'=>CameraResource::collection($this->whenLoaded('recorderToCameras')),
+            'customerName'=>Customer::where('id','=',$this->customer_id)->get('name')->first(),
         ];
     }
 }

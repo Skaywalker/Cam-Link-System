@@ -14,6 +14,10 @@ class Customer extends Model
         'tel',
         'user_id'
     ];
+    protected $hidden=[
+        'created_at',
+        'updated_at',
+        ];
     public function customerToRecorders(){
         return $this->hasMany(Recorder::class);
     }

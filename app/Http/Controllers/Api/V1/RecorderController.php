@@ -26,25 +26,24 @@ class RecorderController extends Controller
         //bug: Apibol hívva a tokenCan folytat nem hatodik végre és beletér az if elágzásba ahova nem volna szabad
         //ügyvél nézet ellenőrzés
         if(Auth::user()->tokenCan('customer:wive')){
-//            return response()->json(['token Cen customer', 'user'=> $request->user()->tokenCen('customer:wive')]);
+
             $includeCameras=$request->query('includeCameras');
             //todo: Ha customer To Recorder null tárjen vissza Nincs hozzárendelve rögzitő.
-//            $userSystem=User::find(Auth::user()->id)->costumer->customerToRecorders;
-            if ($includeCameras){
-                print ("includeCameras");
-//                $userSystem->load('recorderToCameras');
+            $userSystem=User::find(Auth::user()->id)->costumer->customerToRecorders;
+
+            if ($userSystem!==null){
+                return response()->json(['Az Űgyfélhez nem tartozik rögzitő.']);
             }
             //visszatérés csak az ügyfélhez tartozó rögzitők megjelenités
-//            return new RecorderCollection($userSystem->append($request->query()));
+            return new RecorderCollection($userSystem->append($request->query()));
         }
         if (Auth::user()->tokenCan('installer')){
 
             //todo ügyfél nevét is visszaadni Akihez hozzá van rendelve a rögzitő ha nincs akkor null.
             $includeCameras=$request->query('includeCameras');
-            $recorders=User::find(Auth::user()->id)->installer;
-            if ($includeCameras){
-                $recorders=$recorders->with('recorderToCameras');
-            };
+            $recorders=Recorder::where('installer_id','=',Auth::user()->id)->get();
+
+
             return new RecorderCollection($recorders->append($request->query()));
         }
         return response()->json(['alert'=>['type'=>'danger', 'message'=>'Ehez a funkcióhoz nincs hozzáférésed!']]);
@@ -75,19 +74,14 @@ class RecorderController extends Controller
      */
     public function show(Recorder $recorder, Request $request)
     {
-        //todo: user->tokenCan(installer)
-        //todo: user()->tokenCan('customer:wive')
-        //bug: "message": "Call to a member function load() on null",
-        //    "exception": "Error",
-        //    "file": "D:\\web\\camLink\\app\\Http\\Controllers\\Api\\V1\\RecorderController.php",
-        //    "line": 72,
 
-        if (Customer::find($recorder->customer_id)->load('costumerToUser')->id==Auth::user()->id){
-        $includeCameras=$request->query('includeCameras');
-        if ($includeCameras){
+
+        if (Customer::find($recorder->customer_id)->load('costumerToUser')->id==Auth::user()->id) {
             return new RecorderResource($recorder->loadMissing('recorderToCameras'));
         }
-        return new RecorderResource($recorder);
+        if (Recorder::where('isntaller_id','=',Auth::user()->id)){
+            return new RecorderResource($recorder->loadMissing('recorderToCameras'));
+
         }
         return response()->json(['alert',['type'=>'warning','message'=>'Hibás adatbevitel.']]);
     }
