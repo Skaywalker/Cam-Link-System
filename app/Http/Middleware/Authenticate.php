@@ -14,7 +14,9 @@ class Authenticate extends Middleware
     {
         if ($request->expectsJson()){
             return null;
+        }else{
+            return  response()->json(['errors'=>'Jelentkez be!'],401);
+
         }
-       return  response()->json(['errors'=>'Jelentkez be!'],401);
     }
 }

@@ -75,3 +75,8 @@ footer{
 .nav-link{
     cursor: pointer;
 }
+.bi{
+    text-align: center;
+    font-size:1rem;
+    margin: auto;
+}

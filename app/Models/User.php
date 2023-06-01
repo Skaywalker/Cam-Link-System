@@ -34,7 +34,7 @@ class User extends Authenticatable
         'remember_token',
         'updated_at',
         'created_at',
-        'privilege',
+
         'email_verified_at',
 
     ];
@@ -49,7 +49,7 @@ class User extends Authenticatable
     ];
 
     public function installer() {
-        return $this->hasMany('recorders','installer_id', 'id');
+        return $this->hasMany(Recorder::class,'installer_id', 'id');
     }
     public function costumer() {
     return $this->hasOne(Customer::class,'user_id','id');

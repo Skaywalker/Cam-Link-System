@@ -27,9 +27,9 @@ Route::post('login',[AuthContorller::class ,'login']);
 
 
 Route::group(['middleware'=>['auth:sanctum']], function (){
+    Route::apiResource('recorders', RecorderController::class);
     Route::post('register',[AuthContorller::class ,'register']);
     Route::apiResource('customers', CustomerController::class);
-    Route::apiResource('recorders', RecorderController::class);
     Route::apiResource('cameras', CameraController::class);
     Route::post('logout',[AuthContorller::class ,'logout']);
 

@@ -1,13 +1,14 @@
 
 const apiUrl='http://127.0.0.1:8000/api';
+const mainContent=document.getElementById('mainContent')
 const myHeaders= new Headers();
+if (localStorage.getItem('_token')){
+
+    myHeaders.append('Authorization', 'Bearer '+ localStorage.getItem('_token'));
+}
+myHeaders.append('X-CSRF-TOKEN',  document.head.querySelector('meta[name="csrf_token"]').content);
 myHeaders.append("Accept", "application/json");
 myHeaders.append("Content-Type", "application/json");
-myHeaders.append('X-CSRF-TOKEN',  document.head.querySelector('meta[name="csft_token"]').content);
-if (localStorage.getItem('_token')){
-    myHeaders.append('Authorization', localStorage.getItem('_token'));
-}
-// myHeaders.append('XSRF-TOKEN', getCookieValue(csrftoken))
 /**
  * Api hivás
  *  reqData= Kérés adatok Json formátumba.
@@ -15,21 +16,32 @@ if (localStorage.getItem('_token')){
  *  route= Kérés utvonala pl: /login
  * */
 async function api(reqData, method, route) {
-    const requestOptions = {
-
+    mainContent.innerHTML=`
+    <div class="spinner-border text-primary  fs-1" role="status" style="position: fixed; top: 45%; left: 50%; width: 150px; height: 150px;">
+  <span class="visually-hidden">Loading...</span>
+</div>
+    `
+    console.log(reqData,method,route);
+    let requestOptions = {
         method: method,
-        headers: myHeaders,
-        body:(reqData==="")? "": JSON.stringify(reqData),
         redirect: 'follow'
     };
+
+    if (method!=='GET'){
+        (reqData==='')? reqData='': reqData=JSON.stringify(reqData);
+        requestOptions.body=reqData;
+    }
+    requestOptions.headers=myHeaders;
+    console.log(requestOptions)
     return new Promise((resolve, reject) => {
         fetch(apiUrl+route,requestOptions)
             .then(response => {
-
+                    console.log('api call response',response)
                     return response.json();
 
             })
             .then(data=> {
+                console.log('api call data:',data);
                 resolve(data)
             })
             .catch(error=>{

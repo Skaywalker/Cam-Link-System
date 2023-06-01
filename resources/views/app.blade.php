@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csft_token" content="{{csrf_token()}}">
+        <meta name="csrf_token" content="{{csrf_token()}}">
         <title>Cam-Link System</title>
             @vite(['resources/js/app.js'])
     </head>
@@ -36,26 +36,6 @@
         </div>
     </header>
     <main id="mainContent" style="color: white" class="">
-        <div class="" style="color:white; margin: 1rem; display: inline-block">
-            <h2>Rögtitők</h2>
-            <ul style="display: inline-block">
-                <li>Új rögzitő hozzáadása:</li>
-                <li>Új ügyfél hozzáadása:</li>
-            </ul>
-        </div>
-        <div>
-            <table border="1" style="margin: 1rem; display: block; justify-content: center;">
-                <thead style="margin:0 auto">
-                <tr>
-                    <th>#</th>
-                    <th> Rögzitő neve:</th>
-                    <th> Ügyfél neve:</th>
-                    <th> Müvelet:</th>
-                </tr>
-                </thead>
-            </table>
-            <button class="btn btn-primary">daékhj</button>
-        </div>
     </main>
     <footer>
         <ul>

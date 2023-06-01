@@ -22,25 +22,32 @@ class RecorderController extends Controller
      */
     public function index(Request $request)
     {
-        //bug: ErrorException: Attempt to read property "customerToRecorders" on null in file D:\web\camLink\app\Http\Controllers\Api\V1\RecorderController.php on line 27
+
+        //bug: Apibol hívva a tokenCan folytat nem hatodik végre és beletér az if elágzásba ahova nem volna szabad
         //ügyvél nézet ellenőrzés
         if(Auth::user()->tokenCan('customer:wive')){
+//            return response()->json(['token Cen customer', 'user'=> $request->user()->tokenCen('customer:wive')]);
             $includeCameras=$request->query('includeCameras');
-            $userSystem=User::find(Auth::user()->id)->costumer->customerToRecorders;
+            //todo: Ha customer To Recorder null tárjen vissza Nincs hozzárendelve rögzitő.
+//            $userSystem=User::find(Auth::user()->id)->costumer->customerToRecorders;
             if ($includeCameras){
-                $userSystem->load('recorderToCameras');
+                print ("includeCameras");
+//                $userSystem->load('recorderToCameras');
             }
             //visszatérés csak az ügyfélhez tartozó rögzitők megjelenités
-            return new RecorderCollection($userSystem->append($request->query()));
+//            return new RecorderCollection($userSystem->append($request->query()));
         }
-        //todo:intaller hez tartozó rőgzitök megjelenitése!
-        $includeCameras=$request->query('includeCameras');
-        $recorders=Recorder::query();
-        if ($includeCameras){
-            $recorders=$recorders->with('recorderToCameras');
+        if (Auth::user()->tokenCan('installer')){
+
+            //todo ügyfél nevét is visszaadni Akihez hozzá van rendelve a rögzitő ha nincs akkor null.
+            $includeCameras=$request->query('includeCameras');
+            $recorders=User::find(Auth::user()->id)->installer;
+            if ($includeCameras){
+                $recorders=$recorders->with('recorderToCameras');
+            };
+            return new RecorderCollection($recorders->append($request->query()));
         }
-        $recorders= $recorders->get();
-        return new RecorderCollection($recorders->append($request->query()));
+        return response()->json(['alert'=>['type'=>'danger', 'message'=>'Ehez a funkcióhoz nincs hozzáférésed!']]);
     }
     /**
      * Show the form for creating a new resource.
